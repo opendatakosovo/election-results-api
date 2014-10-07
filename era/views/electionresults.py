@@ -1,11 +1,8 @@
 from flask.views import View
 from flask import Response
 from bson import json_util
-from bson.son import SON
 
 from era import mongo
-
-import flask_pymongo
 
 
 class ElectionResults(View):
@@ -20,13 +17,14 @@ class ElectionResults(View):
          :param commune_slug: the given commune
         '''
 
-        results = {
+        query = {
             'year': year,
-            'type': type_slug,
-            'commune': commune_slug
+            #We use dot notation below because we are feeding from mongo
+            'type.slug': type_slug,
+            'commune.slug': commune_slug
         }
 
-        election_results = mongo.db.electionresults.find(results)
+        election_results = mongo.db.electionresults.find(query)
 
         resp = Response(
             response=json_util.dumps(election_results), mimetype='application/json')
