@@ -19,7 +19,7 @@ class ElectionResults(View):
 
         query = {
             'year': year,
-            #We use dot notation below because we are feeding from mongo
+            #We use dot notation below because we are feeding to mongo
             'type.slug': type_slug,
             'commune.slug': commune_slug
         }
@@ -27,6 +27,7 @@ class ElectionResults(View):
         election_results = mongo.db.electionresults.find(query)
 
         resp = Response(
-            response=json_util.dumps(election_results), mimetype='application/json')
+            response=json_util.dumps(election_results),
+            mimetype='application/json')
 
         return resp
